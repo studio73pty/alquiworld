@@ -10,7 +10,8 @@ const knex = require('knex');
 
 //Llamando a los controladores
 const homeProductos = require('./controllers/productos/HomeProductos');
-const buscarProductoId = require('./controllers/productos/BuscarProductoId');
+const buscarProductoId = require('./controllers/productos/BuscarProductoId.js');
+const modificarProducto = require('./controllers/productos/ModificarProducto');
 
 
 const db = knex({
@@ -45,6 +46,12 @@ app.get('/home-productos', (req, res) => { homeProductos.handleHomeProductos(req
 
 //Buscar producto por ID
 app.get('/buscar-producto/:id', (req, res) => { buscarProductoId.handleBuscarProducto(req, res, db)});
+
+
+
+
+//Modificar producto
+app.patch('/modificar-producto/:id', (req, res) => { modificarProducto.handleModificarProducto(req, res, db)});
 
 
 
