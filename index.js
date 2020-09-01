@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-//const mysql = require('mysql');
-//const fs = require('fs');
+const mysql = require('mysql');
+const fs = require('fs');
 require('dotenv').config();
 const knex = require('knex');
 //const bcrypt = require('bcrypt-nodejs');
@@ -84,7 +84,7 @@ app.use('/agregar-producto', upload.array('image'), async(req, res) => {
             const unsafeUrl = urls[0].url;
             insert(unsafeUrl, 4, 's');
   
-               db('posts').insert({
+               db('productos').insert({
                 nombre, 
                 descripcion,   
                 imagen: safeUrl   
