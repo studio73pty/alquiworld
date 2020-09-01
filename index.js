@@ -98,9 +98,49 @@ app.use('/agregar-producto', upload.array('image'), async(req, res) => {
   })
   
 
-
 //Modificar producto
 app.patch('/modificar-producto/:id', (req, res) => { modificarProducto.handleModificarProducto(req, res, db)});
+
+//Modificar imagen producto
+app.use('/modificar-imagen-producto/:id', upload.array('image'), async(req, res) => {
+  const uploader = async (path) => await cloudinary.uploads(path, 'Alquiworld');
+  let safeUrl = '';
+  const insert = (str, index, value) => {
+    safeUrl = str.substr(0, index) + value + str.substr(index);
+}
+  const { id } = req.params;
+  if (req.method === 'PATCH') {
+      const urls = [];
+      const files = req.files;
+
+      for(const file of files) {
+          const { path } = file;
+
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+
+          fs.unlinkSync(path);
+      
+          };
+          const unsafeUrl = urls[0].url;
+          insert(unsafeUrl, 4, 's');
+
+            db('productos').where({id: id}).update({             
+              imagen: safeUrl
+             // id: urls[0].id
+
+          })
+             .then(console.log)           
+          
+      res.status(200).json('exito');
+  } else {
+      res.status(405).json({
+          err: "No se pudo subir la imagen"
+      })
+  }
+  
+})
 
 //Eliminar producto
 app.delete('/eliminar-producto/:id', (req, res) => { eliminarProducto.handleEliminarProducto(req, res, db)});
