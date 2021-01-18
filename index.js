@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const fs = require('fs');
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
 const knex = require('knex');
 //const bcrypt = require('bcrypt-nodejs');
 
